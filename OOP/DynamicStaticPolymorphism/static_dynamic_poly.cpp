@@ -68,6 +68,11 @@ namespace DynamicPolymorphism
             : formatter_{std::move(formatter)}
         { }
 
+        void set_formatter(std::unique_ptr<Formatter> new_formater)
+        {
+            formatter_ = std::move(new_formater);
+        }
+
         void log(const std::string& data)
         {
             std::cout << "LOG: " << formatter_->format(data) << '\n';
@@ -77,6 +82,11 @@ namespace DynamicPolymorphism
 
 namespace StaticPolymorphism
 {
+    template <typename T>
+    concept Formatter = requires(T fmt, const std::string& text) {
+        { fmt.format(text) } -> std::same_as<std::string>;
+    };
+
     struct UpperCaseFormatter
     {
         std::string format(const std::string& message) const
@@ -98,7 +108,8 @@ namespace StaticPolymorphism
         }
     };
 
-    template <typename TFormatter = UpperCaseFormatter>
+    template <Formatter TFormatter = UpperCaseFormatter>
+        //requires Formatter<TFormatter> // constraint
     class Logger
     {
         TFormatter formatter_;
@@ -116,6 +127,15 @@ namespace StaticPolymorphism
             std::cout << formatter_.format(message) << std::endl;
         }
     };
+
+    class EvilFormatter
+    {
+    public:
+        std::string format(const std::string& text)
+        {
+            return text + " is dead!!!";
+        }
+    };
 } // namespace StaticPolymorphism
 
 void dynamic_polymorphism()
@@ -125,10 +145,10 @@ void dynamic_polymorphism()
     Logger logger{std::make_unique<UpperCaseFormatter>()};
     logger.log("Hello, World!");
 
-    logger = Logger{std::make_unique<LowerCaseFormatter>()};
+    logger.set_formatter(std::make_unique<LowerCaseFormatter>());
     logger.log("Hello, World!");
 
-    logger = Logger{std::make_unique<CapitalizeFormatter>()};
+    logger.set_formatter(std::make_unique<CapitalizeFormatter>());
     logger.log("Hello, World!");
 }
 
@@ -141,6 +161,9 @@ void static_polymorphism()
 
     Logger<CapitalizeFormatter> logger2;
     logger2.log("hello, world!");
+
+    Logger<EvilFormatter> logger3;
+    logger3.log("hello evil");
 }
 
 int main()
