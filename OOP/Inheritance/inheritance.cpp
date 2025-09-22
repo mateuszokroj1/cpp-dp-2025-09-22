@@ -13,7 +13,7 @@ namespace InheritanceOfImplementation
         using BaseImpl = std::set<int>;
 
     public:
-        using BaseImpl::BaseImpl;
+        using BaseImpl::BaseImpl; // inheritance of constructors
 
         size_t size() const
         {

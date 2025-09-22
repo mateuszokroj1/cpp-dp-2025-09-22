@@ -20,6 +20,7 @@ namespace StronglyCoupled
             // creation of product
             SpotifyService music_service("spotify_user", "rjdaslf276%2", 45);
 
+            // usage of product
             std::optional<Track> track = music_service.get_track(track_title);
 
             if (track)
@@ -78,8 +79,9 @@ int main()
     music_service_factory.emplace("Tidal", std::make_shared<TidalServiceCreator>("tidal_user", "KJH8324d&df"));
     music_service_factory.emplace("Spotify", std::make_shared<SpotifyServiceCreator>("spotify_user", "rjdaslf276%2", 45));
     music_service_factory.emplace("Filesystem", std::make_shared<FsMusicServiceCreator>());
+    music_service_factory.emplace("YouTube", std::make_shared<YouTubeMusicServiceCreator>("user1", "123", true));
 
-    std::string id_from_config = "Tidal";
+    std::string id_from_config = "YouTube";
     MusicApp app(music_service_factory.at(id_from_config));
     app.play("Would?");
 }
