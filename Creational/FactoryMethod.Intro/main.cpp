@@ -7,6 +7,7 @@
 #include <string>
 #include <unordered_map>
 #include <vector>
+#include <list>
 
 namespace StronglyCoupled
 {
@@ -121,4 +122,43 @@ int main()
     std::string id_from_config = "YouTube";
     MusicApp app(music_service_factory.at(id_from_config));
     app.play("Would?");
+}
+
+// interface Iterator
+// {
+//     Iterator next(); // operator++
+//     Item current();  // operator*
+// };
+
+// interface Container
+// {
+//     Iterator create_iterator(); // begin()
+//                                 // end()
+// }
+
+void most_frequent_factory_method()
+{
+    std::list<int> vec = {1, 2, 3, 4};
+
+    // for(const auto& item : vec)
+    //     std::cout << item << " ";
+    // std::cout << "\n";
+
+    for(auto it = vec.begin(); it != vec.end(); ++it)
+    {
+        const auto& item = *it;
+        std::cout << item << " ";
+    }
+    std::cout << "\n";
+
+    // ConcreteContainer cont;
+
+    // Iterator it = cont.create_container();
+    // while(it.is_done())
+    // {
+    //     Item item = it.current();
+    //     //...
+
+    //     it.next();
+    // }
 }
