@@ -5,11 +5,13 @@
 
 namespace Drawing
 {
-    class Rectangle : public ShapeBase
+    class Rectangle : public CloneableShape<Rectangle, ShapeBase>
     {
         int width_, height_;
 
     public:
+        using BaseType = CloneableShape<Rectangle, ShapeBase>;
+        
         static constexpr const char* id = "Rectangle";
 
         Rectangle(int x = 0, int y = 0, int w = 0, int h = 0);
@@ -35,11 +37,6 @@ namespace Drawing
         }
 
         void draw() const override;
-
-        std::unique_ptr<Shape> clone() const override
-        {
-            return std::make_unique<Rectangle>(*this);
-        }
     };
 } // namespace Drawing
 #endif // RECTANGLE_HPP

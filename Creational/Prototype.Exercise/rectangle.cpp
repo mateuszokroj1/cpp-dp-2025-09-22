@@ -11,7 +11,7 @@ namespace
 }
 
 Rectangle::Rectangle(int x, int y, int w, int h)
-    : ShapeBase{x, y}
+    : BaseType{x, y}
     , width_{w}
     , height_{h}
 {

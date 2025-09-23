@@ -6,7 +6,7 @@
 namespace Drawing
 {
 
-    class Square : public Shape
+    class Square : public CloneableShape<Square>
     {
         Rectangle rect_;
 
@@ -25,12 +25,7 @@ namespace Drawing
 
         void draw() const override;
 
-        void move(int dx, int dy) override;
-
-        std::unique_ptr<Shape> clone() const override
-        {
-            return std::make_unique<Square>(*this);
-        }
+        void move(int dx, int dy) override;        
     };
 }
 
