@@ -56,6 +56,8 @@ namespace Game
         }
     };
 
+    /////////////////////////////////////////////
+
     class BadSoldier : public Soldier
     {
     public:

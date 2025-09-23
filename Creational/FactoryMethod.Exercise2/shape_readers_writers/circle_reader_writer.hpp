@@ -1,8 +1,8 @@
 #ifndef CIRCLEREADERWRITER_H
 #define CIRCLEREADERWRITER_H
 
-#include "shape_reader_writer.hpp"
 #include "../circle.hpp"
+#include "shape_reader_writer.hpp"
 
 namespace Drawing
 {
@@ -31,7 +31,7 @@ namespace Drawing
                 out << Circle::id << " " << circle.coord() << " " << circle.radius() << std::endl;
             }
         };
-    }
-}
+    } // namespace IO
+} // namespace Drawing
 
 #endif // CIRCLEREADERWRITER_H
