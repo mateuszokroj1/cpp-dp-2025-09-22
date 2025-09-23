@@ -7,8 +7,11 @@ class Person
 {
     std::string first_name_;
     std::string last_name_;
+    
+    // address
     std::string address_, postal_code_, city_;
 
+    // job
     std::string company_name_;
     std::string tax_id_;
 public:

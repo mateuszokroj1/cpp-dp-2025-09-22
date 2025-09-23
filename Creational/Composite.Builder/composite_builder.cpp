@@ -7,6 +7,15 @@
 
 int main()
 {
+    Person j = Person::create("Zenon", "Anonim")
+        .lives()
+            .at("Ulica")
+            .in("Miasto")
+            .with_postal_code("00-000")
+        .works()
+            .in_company("Zeiss")
+            .with_tax_id("PL76200");
+
     // clang-format off
     Person p = 
         Person::create("Jan", "Kowalski")
