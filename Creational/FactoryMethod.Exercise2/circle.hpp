@@ -2,15 +2,22 @@
 #define CIRCLE_H
 
 #include "shape.hpp"
+#include <cstdint>
 
 namespace Drawing
 {
-    // TODO - add a circle to Shape hierarchy
-
-    class Circle
+    class Circle : public ShapeBase
     {
+        uint32_t radius_;
+
     public:
-        Circle();
+        static constexpr const char *id = "Circle";
+
+        Circle(int x, int y, uint32_t radius);
+        uint32_t radius() const;
+        void set_radius(uint32_t size);
+
+        void draw() const override;
     };
 }
 

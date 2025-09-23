@@ -3,6 +3,7 @@
 #include <iostream>
 #include <memory>
 #include <vector>
+#include <concepts>
 
 using namespace std;
 
@@ -16,23 +17,15 @@ enum class IconType
     warning,
     error
 };
-
-class Widget
-{
-public:
-    virtual void draw() = 0;
-    virtual ~Widget() = default;
-};
-
+/*
 class Button : public Widget
 {
     std::string caption_;
     IconType icon_type_;
 
 public:
-    Button(const std::string& caption, IconType icon_type)
-        : caption_{caption}
-        , icon_type_{icon_type}
+    Button(const std::string &caption, IconType icon_type)
+        : caption_{caption}, icon_type_{icon_type}
     {
     }
 
@@ -47,12 +40,13 @@ public:
     }
 };
 
+
 class Menu : public Widget
 {
     std::string text_;
 
 public:
-    Menu(const std::string& text)
+    Menu(const std::string &text)
         : text_{text}
     {
     }
@@ -115,7 +109,7 @@ public:
     void display() const
     {
         std::cout << "######################\n";
-        for (const auto& w : widgets)
+        for (const auto &w : widgets)
             w->draw();
         std::cout << "######################\n\n";
     }
@@ -158,13 +152,21 @@ public:
         add_widget(std::make_unique<WindowsButton>("Cancel", IconType::cancel));
 #endif
     }
+};*/
+
+struct Widget
+{
+    virtual void draw() = 0;
+    virtual ~Widget() = default;
 };
+
+
 
 int main(void)
 {
-    WindowOne w1;
+    /*WindowOne w1;
     w1.display();
 
     WindowTwo w2;
-    w2.display();
+    w2.display();*/
 }

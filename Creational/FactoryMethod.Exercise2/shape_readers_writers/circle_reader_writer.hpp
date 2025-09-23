@@ -7,9 +7,10 @@ namespace Drawing
 {
     namespace IO
     {
-        // TODO
         class CircleReaderWriter : public ShapeReaderWriter
         {
+            void read(Shape& shp, std::istream& in) override;
+            void write(const Shape& shp, std::ostream& out) override;
         };
     }
 }
