@@ -63,6 +63,19 @@ public:
     {
     }
 
+    Car(const Car& other)
+        : engine_{}
+    {
+        if (typeid(*other.engine_) == typeid(Diesel))
+            engine_ = std::make_unique<Diesel>();
+        else if (typeid(*other.engine_) == typeid(TDI))
+            engine_ = std::make_unique<TDI>();
+        else if (typeid(*other.engine_) == typeid(Hybrid))
+            engine_ = std::make_unique<Hybrid>();
+        else
+            assert(false && "Unknown engine type");
+    }
+
     void drive(int km)
     {
         engine_->start();
@@ -77,4 +90,6 @@ int main()
     c1.drive(100);
 
     std::cout << "\n";
+
+    Car c2 = c1;
 }
