@@ -25,7 +25,12 @@ namespace Drawing
         }
 
         void draw() const override;
+
+        std::unique_ptr<Shape> clone() const override
+        {
+            return std::make_unique<Circle>(*this);
+        }
     };
-}
+} // namespace Drawing
 
 #endif // CIRCLE_H

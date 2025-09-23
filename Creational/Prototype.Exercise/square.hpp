@@ -26,6 +26,11 @@ namespace Drawing
         void draw() const override;
 
         void move(int dx, int dy) override;
+
+        std::unique_ptr<Shape> clone() const override
+        {
+            return std::make_unique<Square>(*this);
+        }
     };
 }
 
