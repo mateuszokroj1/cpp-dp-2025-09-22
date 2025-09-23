@@ -45,7 +45,7 @@ public:
 
     void request() override
     {
-        adaptee_.specific_request();
+        adaptee_.specific_request(); // delegation
     }
 };
 

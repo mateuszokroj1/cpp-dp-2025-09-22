@@ -7,6 +7,7 @@
 
 int main()
 {
+    // clang-format off
     Person j = Person::create("Zenon", "Anonim")
         .lives()
             .at("Ulica")
@@ -16,7 +17,7 @@ int main()
             .in_company("Zeiss")
             .with_tax_id("PL76200");
 
-    // clang-format off
+
     Person p = 
         Person::create("Jan", "Kowalski")
             .lives()
@@ -26,7 +27,7 @@ int main()
             .works()
                 .in_company("Infotraining")
                 .with_tax_id("PL00011100");
-    // clang-format on
+
 
     std::cout << p.description() << "\n";
 
@@ -37,4 +38,5 @@ int main()
         .works()
             .in_company("FP")
             .with_tax_id("246278364");
+    // clang-format on
 }
