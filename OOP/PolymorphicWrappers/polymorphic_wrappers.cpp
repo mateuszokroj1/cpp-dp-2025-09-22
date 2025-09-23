@@ -44,6 +44,7 @@ int main(int argc, char* argv[])
     Shape shp1 = Circle(1, 2, 10);
     shp1.draw();
     shp1 = Square(50, 10, 120);
+    shp1.draw();
 
     std::cout << "\n\n";
 
