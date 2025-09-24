@@ -87,6 +87,34 @@ public:
     }
 };
 
+class StatGroup : public Statistics
+{
+    std::vector<std::shared_ptr<Statistics>> statistics_;
+public:
+    StatGroup() = default;
+
+    StatGroup(const std::vector<std::shared_ptr<Statistics>>& stats)
+        : statistics_{stats}
+    {
+    }
+
+    void add_statistic(std::shared_ptr<Statistics> stat)
+    {
+        statistics_.push_back(stat);
+    }
+
+    Results calculate(const Data& data) override
+    {
+        Results results;
+        for (const auto& stat : statistics_)
+        {
+            Results res = stat->calculate(data);
+            results.insert(results.end(), res.begin(), res.end());
+        }
+        return results;
+    }
+};
+
 class DataAnalyzer
 {
     std::shared_ptr<Statistics> statistics_;
@@ -146,24 +174,34 @@ int main()
     auto min_max = std::make_shared<MinMax>();
     auto sum = std::make_shared<Sum>();
     auto median = std::make_shared<Median>();
+
+    auto std_stats = std::make_shared<StatGroup>();
+    std_stats->add_statistic(avg);
+    std_stats->add_statistic(min_max);
+    std_stats->add_statistic(sum);
+
+    auto advanced_stats = std::make_shared<StatGroup>();
+    advanced_stats->add_statistic(std_stats);   
+    advanced_stats->add_statistic(median);
     
-    DataAnalyzer da{avg};
+    DataAnalyzer da{std_stats};
     da.load_data("stats_data.dat");
     da.calculate();
 
-    da.set_statistics(min_max);
-    da.calculate();
+    // da.set_statistics(min_max);
+    // da.calculate();
 
-    da.set_statistics(sum);
-    da.calculate();
+    // da.set_statistics(sum);
+    // da.calculate();
 
-    da.set_statistics(median);
-    da.calculate();
+    // da.set_statistics(median);
+    // da.calculate();
 
     show_results(da.results());
 
     std::cout << "\n\n";
-
+    
+    da.set_statistics(advanced_stats);
     da.load_data("new_stats_data.dat");
     da.calculate();
 
