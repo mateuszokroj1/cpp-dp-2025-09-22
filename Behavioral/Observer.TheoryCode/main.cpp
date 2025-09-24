@@ -79,36 +79,36 @@ public:
 
 int main()
 {
-    Fan fan;
-    TemperatureMonitor temp_monitor(21.0);
+    auto fan = std::make_shared<Fan>();
+    auto temp_monitor = std::make_shared<TemperatureMonitor>(21.0);
     {
-        ConsoleLogger console_logger;
+        auto console_logger = std::make_shared<ConsoleLogger>();
 
-        temp_monitor.subscribe(&fan);
-        temp_monitor.subscribe(&console_logger);
-        fan.subscribe(&console_logger);
+        temp_monitor->subscribe(fan);
+        temp_monitor->subscribe(console_logger);
+        fan->subscribe(console_logger);
 
-        temp_monitor.set_temperature(22.0);
-        temp_monitor.set_temperature(23.0);
-        temp_monitor.set_temperature(24.0);
-        temp_monitor.set_temperature(25.0);
-        temp_monitor.set_temperature(26.0);
-        temp_monitor.set_temperature(25.0);
-        temp_monitor.set_temperature(24.0);
-        temp_monitor.set_temperature(23.0);
-        temp_monitor.set_temperature(21.0);
+        temp_monitor->set_temperature(22.0);
+        temp_monitor->set_temperature(23.0);
+        temp_monitor->set_temperature(24.0);
+        temp_monitor->set_temperature(25.0);
+        temp_monitor->set_temperature(26.0);
+        temp_monitor->set_temperature(25.0);
+        temp_monitor->set_temperature(24.0);
+        temp_monitor->set_temperature(23.0);
+        temp_monitor->set_temperature(21.0);
 
         std::cout << "\nUnsubscribing Fan from TemperatureMonitor...\n\n";
-        temp_monitor.unsubscribe(&fan);
+        temp_monitor->unsubscribe(fan);
 
-        temp_monitor.set_temperature(22.0);
-        temp_monitor.set_temperature(23.0);
-        temp_monitor.set_temperature(24.0);
-        temp_monitor.set_temperature(25.0);
-        temp_monitor.set_temperature(26.0);
+        temp_monitor->set_temperature(22.0);
+        temp_monitor->set_temperature(23.0);
+        temp_monitor->set_temperature(24.0);
+        temp_monitor->set_temperature(25.0);
+        temp_monitor->set_temperature(26.0);
     }
-    temp_monitor.set_temperature(25.0);
-    temp_monitor.set_temperature(24.0);
-    temp_monitor.set_temperature(23.0);
-    temp_monitor.set_temperature(21.0);
+    temp_monitor->set_temperature(25.0);
+    temp_monitor->set_temperature(24.0);
+    temp_monitor->set_temperature(23.0);
+    temp_monitor->set_temperature(21.0);
 }
