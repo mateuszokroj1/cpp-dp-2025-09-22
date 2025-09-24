@@ -28,7 +28,8 @@ public:
 };
 
 // Observer & Subject
-class Fan : public Observer<TemperatureMonitor, double>, public Observable<Fan, const std::string&>
+class Fan : public Observer<TemperatureMonitor, double>,
+            public Observable<Fan, const std::string&>
 {
     bool is_on_ = false;
 
@@ -56,9 +57,15 @@ public:
 };
 
 // Observer
-class ConsoleLogger : public Observer<TemperatureMonitor, double>, public Observer<Fan, const std::string&>
+class ConsoleLogger : public Observer<TemperatureMonitor, double>,
+                      public Observer<Fan, const std::string&>
 {
 public:
+    ~ConsoleLogger()
+    {
+        std::cout << "~ConsoleLogger() - logger destroyed" << std::endl;
+    }
+
     void update(TemperatureMonitor& tm, double current_temperature) override
     {
         std::cout << "ConsoleLogger notified - temperature has changed to " << current_temperature << std::endl;
@@ -74,29 +81,32 @@ int main()
 {
     Fan fan;
     TemperatureMonitor temp_monitor(21.0);
-    ConsoleLogger console_logger;
+    {
+        ConsoleLogger console_logger;
 
-    temp_monitor.subscribe(&fan);
-    temp_monitor.subscribe(&console_logger);
-    fan.subscribe(&console_logger);
+        temp_monitor.subscribe(&fan);
+        temp_monitor.subscribe(&console_logger);
+        fan.subscribe(&console_logger);
 
-    temp_monitor.set_temperature(22.0);
-    temp_monitor.set_temperature(23.0);
-    temp_monitor.set_temperature(24.0);
-    temp_monitor.set_temperature(25.0);
-    temp_monitor.set_temperature(26.0);
-    temp_monitor.set_temperature(25.0);
-    temp_monitor.set_temperature(24.0);
-    temp_monitor.set_temperature(23.0);
-    temp_monitor.set_temperature(21.0);
+        temp_monitor.set_temperature(22.0);
+        temp_monitor.set_temperature(23.0);
+        temp_monitor.set_temperature(24.0);
+        temp_monitor.set_temperature(25.0);
+        temp_monitor.set_temperature(26.0);
+        temp_monitor.set_temperature(25.0);
+        temp_monitor.set_temperature(24.0);
+        temp_monitor.set_temperature(23.0);
+        temp_monitor.set_temperature(21.0);
 
-    temp_monitor.unsubscribe(&fan);
+        std::cout << "\nUnsubscribing Fan from TemperatureMonitor...\n\n";
+        temp_monitor.unsubscribe(&fan);
 
-    temp_monitor.set_temperature(22.0);
-    temp_monitor.set_temperature(23.0);
-    temp_monitor.set_temperature(24.0);
-    temp_monitor.set_temperature(25.0);
-    temp_monitor.set_temperature(26.0);
+        temp_monitor.set_temperature(22.0);
+        temp_monitor.set_temperature(23.0);
+        temp_monitor.set_temperature(24.0);
+        temp_monitor.set_temperature(25.0);
+        temp_monitor.set_temperature(26.0);
+    }
     temp_monitor.set_temperature(25.0);
     temp_monitor.set_temperature(24.0);
     temp_monitor.set_temperature(23.0);

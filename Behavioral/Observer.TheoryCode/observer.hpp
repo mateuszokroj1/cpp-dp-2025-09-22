@@ -19,10 +19,14 @@ template <typename TSource, typename... TEventArgs>
 struct Observable
 {
     void subscribe(Observer<TSource, TEventArgs...>* observer)
-    {        
+    {
         observers_.insert(observer);
     }
-    void unsubscribe(Observer<TSource, TEventArgs...>* observer) { observers_.erase(observer); }
+
+    void unsubscribe(Observer<TSource, TEventArgs...>* observer)
+    {
+        observers_.erase(observer);
+    }
 
 protected:
     void notify(TSource& source, TEventArgs... args)
