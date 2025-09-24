@@ -1,4 +1,5 @@
 #include "proxy.hpp"
+
 #include <functional>
 
 using ImageFactory = std::function<std::unique_ptr<Image>(std::string)>;
