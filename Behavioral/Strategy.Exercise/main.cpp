@@ -23,22 +23,79 @@ struct StatResult
 using Data = std::vector<double>;
 using Results = std::vector<StatResult>;
 
-enum StatisticsType
+// enum StatisticsType
+// {
+//     avg,
+//     min_max,
+//     sum
+// };
+
+class Statistics
 {
-    avg,
-    min_max,
-    sum
+public:
+    virtual ~Statistics() = default;
+    virtual Results calculate(const Data& data) = 0;
+};
+
+class Avg : public Statistics
+{
+public:
+    Results calculate(const Data& data) override
+    {
+        double sum = std::accumulate(data.begin(), data.end(), 0.0);
+        double avg = sum / data.size();
+
+        return { StatResult("Avg", avg) };
+    }
+};
+
+class MinMax : public Statistics
+{
+public:
+    Results calculate(const Data& data) override
+    {
+        double min = *(std::min_element(data.begin(), data.end()));
+        double max = *(std::max_element(data.begin(), data.end()));
+
+        return { StatResult("Min", min), StatResult("Max", max) };
+    }
+};
+
+class Sum : public Statistics
+{
+public:
+    Results calculate(const Data& data) override
+    {
+        double sum = std::accumulate(data.begin(), data.end(), 0.0);
+        return { StatResult("Sum", sum) };
+    }
+};
+
+class Median : public Statistics
+{
+public:
+    Results calculate(const Data& data) override
+    {
+        if (data.empty())
+            return { StatResult("Median", 0.0) };
+
+        std::vector<double> sorted_data = data;
+        std::sort(sorted_data.begin(), sorted_data.end());
+
+        double median = sorted_data[sorted_data.size() / 2];
+        return { StatResult("Median", median) };
+    }
 };
 
 class DataAnalyzer
 {
-    StatisticsType stat_type_;
+    std::shared_ptr<Statistics> statistics_;
     Data data_;
     Results results_;
 
 public:
-    DataAnalyzer(StatisticsType stat_type)
-        : stat_type_{stat_type}
+    DataAnalyzer(std::shared_ptr<Statistics> statistics)
+        : statistics_{statistics}
     {
     }
 
@@ -60,35 +117,15 @@ public:
         std::cout << "File " << file_name << " has been loaded...\n";
     }
 
-    void set_statistics(StatisticsType stat_type)
+    void set_statistics(std::shared_ptr<Statistics> new_stat)
     {
-        stat_type_ = stat_type;
+        statistics_ = new_stat;
     }
 
     void calculate()
     {
-        if (stat_type_ == avg)
-        {
-            double sum = std::accumulate(data_.begin(), data_.end(), 0.0);
-            double avg = sum / data_.size();
-
-            StatResult result("Avg", avg);
-            results_.push_back(result);
-        }
-        else if (stat_type_ == min_max)
-        {
-            double min = *(std::min_element(data_.begin(), data_.end()));
-            double max = *(std::max_element(data_.begin(), data_.end()));
-
-            results_.push_back(StatResult("Min", min));
-            results_.push_back(StatResult("Max", max));
-        }
-        else if (stat_type_ == sum)
-        {
-            double sum = std::accumulate(data_.begin(), data_.end(), 0.0);
-
-            results_.push_back(StatResult("Sum", sum));
-        }
+        Results results = statistics_->calculate(data_);
+        results_.insert(results_.end(), results.begin(), results.end());
     }
 
     const Results& results() const
@@ -105,15 +142,22 @@ void show_results(const Results& results)
 
 int main()
 {
+    auto avg = std::make_shared<Avg>();
+    auto min_max = std::make_shared<MinMax>();
+    auto sum = std::make_shared<Sum>();
+    auto median = std::make_shared<Median>();
+    
     DataAnalyzer da{avg};
     da.load_data("stats_data.dat");
-
     da.calculate();
 
     da.set_statistics(min_max);
     da.calculate();
 
     da.set_statistics(sum);
+    da.calculate();
+
+    da.set_statistics(median);
     da.calculate();
 
     show_results(da.results());
